@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardHeader,
@@ -10,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
 
 function ChromeIcon(props: any) {
   return (
@@ -35,6 +38,12 @@ function ChromeIcon(props: any) {
 }
 
 export function AuthForm() {
+  const form = useForm();
+
+  const handleSubmit = form.handleSubmit((data) => {
+    console.log(data);
+  });
+
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
@@ -42,7 +51,7 @@ export function AuthForm() {
         <CardDescription>Create your account to get started.</CardDescription>
       </CardHeader>
       <CardContent>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -50,6 +59,7 @@ export function AuthForm() {
               type="email"
               placeholder="m@example.com"
               required
+              {...form.register("email")}
             />
           </div>
           <div className="space-y-2">
