@@ -6,13 +6,12 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { signIn } from "next-auth/react";
 
 function ChromeIcon(props: any) {
   return (
@@ -40,15 +39,18 @@ function ChromeIcon(props: any) {
 export function AuthForm() {
   const form = useForm();
 
-  const handleSubmit = form.handleSubmit((data) => {
+  const handleSubmit = form.handleSubmit(async (data) => {
+    await signIn("email", { email: data.email });
     console.log(data);
   });
 
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold">Sign Up</CardTitle>
-        <CardDescription>Create your account to get started.</CardDescription>
+        <CardTitle className="text-2xl font-bold">Login</CardTitle>
+        <CardDescription>
+          Enter your email to login to your account.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form className="space-y-4" onSubmit={handleSubmit}>
@@ -62,25 +64,12 @@ export function AuthForm() {
               {...form.register("email")}
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" required />
-          </div>
+
           <Button type="submit" className="w-full">
-            Sign Up
-          </Button>
-          <Button variant="outline" className="w-full">
-            <ChromeIcon className="mr-2 h-4 w-4" />
-            Sign up with Google
+            Send Magic Link
           </Button>
         </form>
       </CardContent>
-      <CardFooter className="text-center text-sm">
-        Already have an account?{" "}
-        <Link href="#" className="underline" prefetch={false}>
-          Sign in
-        </Link>
-      </CardFooter>
     </Card>
   );
 }
