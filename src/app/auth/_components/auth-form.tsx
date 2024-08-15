@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
+import { toast } from "@/components/ui/use-toast";
 
 function ChromeIcon(props: any) {
   return (
@@ -40,8 +41,18 @@ export function AuthForm() {
   const form = useForm();
 
   const handleSubmit = form.handleSubmit(async (data) => {
-    await signIn("email", { email: data.email });
-    console.log(data);
+    try {
+      await signIn("email", { email: data.email, redirect: false });
+      toast({
+        title: "Magic Link sent",
+        description: "Check your email",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Pleae try again",
+      });
+    }
   });
 
   return (
